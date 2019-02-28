@@ -8,8 +8,9 @@ export class App extends React.Component {
   constructor(props){
     super(props);
     this.state = {
-      step: 2,
-      email: ''
+      step: 1,
+      email: '',
+      name: ""
     }
 
 
@@ -17,32 +18,35 @@ export class App extends React.Component {
 
   prev = (e) => {
     e.preventDefault();
-console.log(e,'eeee');
-   
-    console.log('test');
-    console.log(e);
     this.setState( prevState => {
       console.log(prevState);
       const step =  prevState.step - 1;
       return{
       step: step
       };
-    },() => {
-      console.log('callback');
     })      
   }
 
   next = (e) => {
-    console.log(e);
-e.preventDefualt();
-    console.log('test');
+    e.preventDefault();
+    this.setState( prevState => {
+      console.log(prevState);
+      const step =  prevState.step + 1;
+      return{
+      step: step
+      };
+    })   
 
   }
 
-  handleChange = (e) => {
+  handleChange = (e)=> {
+  console.log(e.target);
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+   const name = e.target.name;
+
     this.setState({
-      email: e.target.value
-    })
+      [name]: value
+    });
   }
 
   renderForm = () => {
@@ -50,14 +54,18 @@ e.preventDefualt();
     switch (this.state.step) {
       case 1:
         return (
-          <small id="emailHelp" className="form-text text-muted">We'll never share your email with anyone else.</small>
+          <>
+          <TextInput name="email" label="Email address: " value={ this.state.email } onChange={() => this.handleChange} placeholder="enter email" info="We'll never share your email with anyone else." />
+          <Button title="prev" onClick={() => this.prev}/>
+           <Button title="next" onClick={() => this.next} /> 
+        </>
         )
       case 2:
         return (
           <>
-            <TextInput label="Email address: " value={ this.state.email } onChange={() => this.handleChange} placeholder="enter email" info="info test" />
+            <TextInput name="name" label="name: " value={ this.state.name } onChange={() => this.handleChange} placeholder="name" info="info test" />
             <Button title="prev" onClick={() => this.prev}/>
-            {/* <Button title="next" onClick={() => this.next} /> */}
+             <Button title="next" onClick={() => this.next} /> 
 
 
           </>

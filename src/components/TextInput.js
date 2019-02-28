@@ -12,7 +12,7 @@ export const TextInput = (props) => {
     return (
         <div className="form-group">
             <label htmlFor="exampleInputEmail1">{props.label}</label>
-            <input value={props.value} onChange={typeof props.onChange === "function"  ? props.onChange() : null} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={props.placeholder} />
+            <input name={props.name} value={props.value} onChange={typeof props.onChange === "function"  ? props.onChange() : null} type="email" className="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder={props.placeholder} />
             {renderInfo()}
         </div>
     )
