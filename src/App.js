@@ -18,7 +18,7 @@ export class App extends React.Component {
             email: true
           },
           valid: false,
-          error: "",
+          error: '',
           touched: false
         },
         name: {
@@ -27,7 +27,7 @@ export class App extends React.Component {
             minLength: 5
           },
           valid: false,
-          error: "",
+          error: '',
           touched: false
         },
         city: {
@@ -36,10 +36,11 @@ export class App extends React.Component {
             required: true
           },
           valid: false,
-          error: "",
+          error: '',
           touched: false
         }
       }
+
 
     }
 
@@ -99,6 +100,11 @@ export class App extends React.Component {
 
     
     const valid = this.checkValidity(value,updatedData[name].validation);
+
+    let error = " ";
+    if (valid === false){
+        error = "Wrong input";
+    }
   
     this.setState(state => {
       return {
@@ -109,8 +115,11 @@ export class App extends React.Component {
             value: value,
             valid: valid,
             validation: updatedData[name].validation,
-            touched: true
-          }
+            touched: true,
+            error: error
+          },
+
+        
 
         }
       }
@@ -151,7 +160,7 @@ export class App extends React.Component {
       case 1:
         return (
           <>
-            <TextInput error={''} touched={this.state.data.email.touched} isValid={this.state.data.email.valid} name="email" label="Email address: " value={this.state.data.email.value} onChange={() => this.handleChange} placeholder="enter email" info="We'll never share your email with anyone else." />
+            <TextInput error={this.state.data.email.error} touched={this.state.data.email.touched} isValid={this.state.data.email.valid} name="email" label="Email address: " value={this.state.data.email.value} onChange={() => this.handleChange} placeholder="enter email" />
             <div className="d-flex">
               <div className=" d-flex flex-fill pr-2" >
                 <Button title="prev" onClick={() => this.prev} />
@@ -165,7 +174,7 @@ export class App extends React.Component {
       case 2:
         return (
           <>
-            <TextInput isValid={this.state.data.name.valid} touched={this.state.data.name.touched} onBlur={() => this.handleOnBlur} name="name" label="name: " value={this.state.data.name.value} onChange={() => this.handleChange} placeholder="name" />
+            <TextInput error={this.state.data.name.error} isValid={this.state.data.name.valid} touched={this.state.data.name.touched} onBlur={() => this.handleOnBlur} name="name" label="name: " value={this.state.data.name.value} onChange={() => this.handleChange} placeholder="name" />
             <div className="d-flex">
               <div className=" d-flex flex-fill pr-2" >
                 <Button title="prev" onClick={() => this.prev} />
@@ -185,7 +194,7 @@ export class App extends React.Component {
                 <Button title="prev" onClick={() => this.prev} />
               </div>
               <div className="d-flex flex-fill pl-2">
-                <Button title="Submit" onClick={() => this.next} />
+                <Button title="Submit" className="btn btn-success flex-fill"onClick={() => this.next} />
               </div>
             </div>
           </>

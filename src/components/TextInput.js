@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 export const TextInput = props => {
 
     const renderError = () => {
-        if(!props.error){
+        if(!props.error || !props.touched || props.isValid){
             return;
         }
         return (
-            <div className="alert alert-danger">{props.error}</div>
+            <div className="alert alert-danger mt-2">{props.error}</div>
         );
     }
     const renderInfo = () => {
