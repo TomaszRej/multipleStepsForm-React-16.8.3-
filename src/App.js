@@ -11,13 +11,33 @@ export class App extends React.Component {
       step: 1,
       data: {
         email: {
-          value: ''
+          value: '',
+          validation: {
+            required: true,
+            minLength: 3,
+            email: true
+          },
+          valid: false,
+          error: "",
+          touched: false
         },
         name: {
-          value: ''
+          value: '',
+          validation: {
+            minLength: 5
+          },
+          valid: false,
+          error: "",
+          touched: false
         },
         city: {
-          value: ''
+          value: '',
+          validation: {
+            required: true
+          },
+          valid: false,
+          error: "",
+          touched: false
         }
       }
 
@@ -75,20 +95,52 @@ export class App extends React.Component {
     console.log(e.target);
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
     const name = e.target.name;
+    const updatedData = { ...this.state.data };
 
+    
+    const valid = this.checkValidity(value,updatedData[name].validation);
+  
     this.setState(state => {
       return {
         ...state,
         data: {
           ...state.data,
           [name]: {
-            value: value
+            value: value,
+            valid: valid,
+            validation: updatedData[name].validation,
+            touched: true
           }
 
         }
       }
 
     });
+  }
+
+  checkValidity(value, rules) {
+    let isValid = true;
+
+    if (rules.required) {
+      isValid = value.trim() !== '' && isValid;
+    }
+
+    if (rules.minLength) {
+      isValid = value.length >= rules.minLength && isValid
+    }
+
+    if (rules.maxLength) {
+      isValid = value.length <= rules.maxLength && isValid
+    }
+    if (rules.email) {
+      isValid = value.includes('@') && isValid
+    }
+
+    return isValid;
+  }
+
+  handleOnBlur = () => {
+    console.log('xx');
   }
 
   renderForm = () => {
@@ -99,7 +151,7 @@ export class App extends React.Component {
       case 1:
         return (
           <>
-            <TextInput name="email" label="Email address: " value={this.state.data.email.value} onChange={() => this.handleChange} placeholder="enter email" info="We'll never share your email with anyone else." />
+            <TextInput error={''} touched={this.state.data.email.touched} isValid={this.state.data.email.valid} name="email" label="Email address: " value={this.state.data.email.value} onChange={() => this.handleChange} placeholder="enter email" info="We'll never share your email with anyone else." />
             <div className="d-flex">
               <div className=" d-flex flex-fill pr-2" >
                 <Button title="prev" onClick={() => this.prev} />
@@ -113,7 +165,7 @@ export class App extends React.Component {
       case 2:
         return (
           <>
-            <TextInput name="name" label="name: " value={this.state.data.name.value} onChange={() => this.handleChange} placeholder="name" />
+            <TextInput isValid={this.state.data.name.valid} touched={this.state.data.name.touched} onBlur={() => this.handleOnBlur} name="name" label="name: " value={this.state.data.name.value} onChange={() => this.handleChange} placeholder="name" />
             <div className="d-flex">
               <div className=" d-flex flex-fill pr-2" >
                 <Button title="prev" onClick={() => this.prev} />
@@ -127,7 +179,7 @@ export class App extends React.Component {
       case 3:
         return (
           <>
-            <TextInput name="city" label="city: " value={this.state.data.city.value} onChange={() => this.handleChange} placeholder="city" />
+            <TextInput name="city" label="city: " touched={this.state.data.city.touched} isValid={this.state.data.city.valid} value={this.state.data.city.value} onChange={() => this.handleChange} placeholder="city" />
             <div className="d-flex">
               <div className=" d-flex flex-fill pr-2" >
                 <Button title="prev" onClick={() => this.prev} />
